@@ -28,7 +28,7 @@ spec:
       #               'until mysqladmin ping -u dangtong -p${MYSQL_PASSWORD} -h mysql-svc.default; do echo waiting for database; sleep 2; done;']
       containers:
         - name: simple-web
-          image: archichiki/simple-web:6
+          image: archichiki/simple-web:7
           # envFrom:
           #   - configMapRef:
           #       name: simple-web-app-config
