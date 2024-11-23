@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  simple-web
+  labels:
+    app:  simple-web
+spec:
+  selector:
+    matchLabels:
+      app: simple-web
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: simple-web
+    spec:
+      # initContainers:
+      #   - name: check-mysql-ready
+      #     image: mysql:8.0
+      #     env:
+      #       - name: MYSQL_PASSWORD
+      #         valueFrom:
+      #           secretKeyRef:
+      #             name: simple-web-db-secret
+      #             key: MYSQL_PASSWORD
+      #     command: ['sh',
+      #               '-c',
+      #               'until mysqladmin ping -u dangtong -p${MYSQL_PASSWORD} -h mysql-svc.default; do echo waiting for database; sleep 2; done;']
+      containers:
+        - name: simple-web
+          image: archichiki/simple-web:v1.0
+          # envFrom:
+          #   - configMapRef:
+          #       name: simple-web-app-config
+          # env:
+          #   - name: spring.datasource.password
+          #     valueFrom:
+          #       secretKeyRef:
+          #         name: simple-web-db-secret
+          #         key: MYSQL_PASSWORD
+          #   - name: spring.datasource.username
+          #     valueFrom:
+          #       configMapKeyRef:
+          #         name: simple-web-db-config
+          #         key: MYSQL_USER
+          # readinessProbe:
+          #   httpGet:
+          #     path: /actuator
+          #     port: 8080
+          #   initialDelaySeconds: 30
+          #   timeoutSeconds: 3
+          #   successThreshold: 2
+          #   failureThreshold: 3
+          #   periodSeconds: 10
+          ports:
+            - containerPort:  80
+              name: simple-web
+      # volumes:
+      #   - name: application-config
+      #     configMap:
+      #       name: simple-web-app-config
+      restartPolicy: Always
